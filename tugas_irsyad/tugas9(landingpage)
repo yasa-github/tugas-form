@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PeTIK Jombang — Pesantren Teknologi Informasi & Komunikasi</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Boxicons & Font Awesome CDN -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg-dark: #080f1d;
+      --bg-card: rgba(14, 25, 48, 0.72);
+      --border-glow: rgba(255, 255, 255, 0.1);
+      
+      /* Vibrant Clean Palette */
+      --brand-blue: #1b68ff;
+      --brand-cyan: #00d2ff;
+      --brand-green: #05df72;
+      --brand-yellow: #facc15;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+
+      /* Gradients */
+      --grad-primary: linear-gradient(135deg, #1b68ff 0%, #05df72 100%);
+      --grad-yellow: linear-gradient(135deg, #facc15 0%, #fb923c 100%);
+      --grad-cyan-green: linear-gradient(135deg, #00d2ff 0%, #05df72 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Background Glow */
+    .glow-sphere {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(140px);
+      z-index: -1;
+      opacity: 0.35;
+      pointer-events: none;
+      animation: floatPulse 10s infinite alternate ease-in-out;
+    }
+    .sphere-blue { top: -100px; left: -100px; width: 500px; height: 500px; background: #1b68ff; }
+    .sphere-green { bottom: 10%; right: -100px; width: 450px; height: 450px; background: #05df72; }
+    .sphere-yellow { top: 45%; left: 45%; width: 320px; height: 320px; background: #facc15; opacity: 0.18; }
+
+    @keyframes floatPulse {
+      0% { transform: scale(1) translate(0, 0); }
+      100% { transform: scale(1.15) translate(30px, -20px); }
+    }
+
+    /* Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(8, 15, 29, 0.82);
+      border-bottom: 1px solid var(--border-glow);
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      margin: auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.45rem;
+    }
+
+    .brand-logo-glow {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--grad-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(5, 223, 114, 0.45);
+      font-size: 1.25rem;
+      color: #080f1d;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--brand-cyan);
+    }
+
+    .nav-cta-btn {
+      background: var(--grad-primary);
+      color: #080f1d !important;
+      font-weight: 700 !important;
+      padding: 0.6rem 1.4rem;
+      border-radius: 50px;
+      box-shadow: 0 4px 18px rgba(27, 104, 255, 0.4);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .nav-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(5, 223, 114, 0.6);
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 1240px;
+      margin: 4.5rem auto 5rem;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--brand-yellow);
+      background: rgba(250, 204, 21, 0.1);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.2px;
+      max-width: 900px;
+      margin: 0 auto 1.4rem;
+    }
+
+    .hero-title span {
+      background: var(--grad-cyan-green);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      max-width: 720px;
+      line-height: 1.8;
+      margin: 0 auto 2.6rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+    }
+
+    .btn {
+      padding: 0.9rem 1.9rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .btn-pmb {
+      background: var(--brand-blue);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(27, 104, 255, 0.4);
+    }
+    .btn-pmb:hover {
+      background: #0d54e0;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(27, 104, 255, 0.6);
+    }
+
+    .btn-maps {
+      background: var(--brand-green);
+      color: #080f1d;
+      box-shadow: 0 4px 20px rgba(5, 223, 114, 0.35);
+    }
+    .btn-maps:hover {
+      background: #04b85d;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(5, 223, 114, 0.55);
+    }
+
+    .btn-wa {
+      background: var(--brand-yellow);
+      color: #080f1d;
+      box-shadow: 0 4px 20px rgba(250, 204, 21, 0.35);
+    }
+    .btn-wa:hover {
+      background: #eab308;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(250, 204, 21, 0.55);
+    }
+
+    /* Live Filter Controls */
+    .filter-wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 2.8rem;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-glow);
+      color: var(--text-muted);
+      padding: 0.55rem 1.3rem;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--grad-primary);
+      color: #080f1d;
+      border-color: transparent;
+      box-shadow: 0 0 16px rgba(5, 223, 114, 0.35);
+    }
+
+    /* 9 Keunggulan Section */
+    .section-keunggulan {
+      max-width: 1240px;
+      margin: 0 auto 6rem;
+      padding: 0 2rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-header h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .grid-keunggulan {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .card-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 2.2rem 2rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .card-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+      transition: background 0.3s ease;
+    }
+
+    .card-item:hover {
+      transform: translateY(-8px);
+      border-color: rgba(0, 210, 255, 0.35);
+      box-shadow: 0 20px 45px rgba(0, 210, 255, 0.12);
+    }
+
+    .card-item:hover::after {
+      background: var(--grad-primary);
+    }
+
+    .card-icon-box {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .icon-blue { background: rgba(27, 104, 255, 0.15); color: var(--brand-cyan); border: 1px solid rgba(27, 104, 255, 0.3); }
+    .icon-green { background: rgba(5, 223, 114, 0.15); color: var(--brand-green); border: 1px solid rgba(5, 223, 114, 0.3); }
+    .icon-yellow { background: rgba(250, 204, 21, 0.15); color: var(--brand-yellow); border: 1px solid rgba(250, 204, 21, 0.3); }
+
+    .card-number {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.8rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.05);
+      user-select: none;
+    }
+
+    .card-item h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .card-item p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Footer & Info Section */
+    footer {
+      border-top: 1px solid var(--border-glow);
+      background: #050b14;
+      padding: 4.5rem 2rem 2rem;
+    }
+
+    .footer-grid {
+      max-width: 1240px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 3.5rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .footer-about h3, .footer-info h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 1.2rem;
+      color: #fff;
+    }
+
+    .footer-address {
+      display: flex;
+      gap: 12px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 1rem;
+    }
+
+    .footer-address i {
+      color: var(--brand-green);
+      font-size: 1.3rem;
+      margin-top: 4px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .contact-item:hover {
+      color: var(--brand-cyan);
+    }
+
+    .contact-item i {
+      font-size: 1.15rem;
+      width: 24px;
+      color: var(--brand-yellow);
+    }
+
+    .bottom-bar {
+      max-width: 1240px;
+      margin: auto;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-glow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-title { font-size: 2.7rem; }
+      .nav-links { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .grid-keunggulan { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Ambient Mesh Spheres -->
+  <div class="glow-sphere sphere-blue"></div>
+  <div class="glow-sphere sphere-green"></div>
+  <div class="glow-sphere sphere-yellow"></div>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <div class="brand-logo-glow">
+          <i class='bx bx-infinite'></i>
+        </div>
+        PeTIK Jombang
+      </a>
+      <ul class="nav-links">
+        <li><a href="#home"><i class='bx bx-home-alt'></i> Home</a></li>
+        <li><a href="#profil"><i class='bx bx-user'></i> Profil</a></li>
+        <li><a href="#keunggulan"><i class='bx bx-star'></i> 9 Keunggulan</a></li>
+        <li><a href="#kontak"><i class='bx bx-phone'></i> Kontak</a></li>
+      </ul>
+      <a href="#keunggulan" class="nav-cta-btn">Jelajahi Program</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-badge">
+      <i class='bx bxs-check-shield'></i> Pesantren Berbasis Teknologi & Karakter
+    </div>
+    <h1 class="hero-title">
+      Welcome to <span>PeTIK Jombang</span>
+    </h1>
+    <p class="hero-desc">
+      Pesantren yang Melahirkan Santri dengan Kemampuan IT Unggul, Berakhlak Mulia, dan Siap Bersaing di Industri Digital Global.
+    </p>
+
+    <!-- Quick Action Buttons -->
+    <div class="hero-actions">
+      <a href="https://webpetik.petikjombang.com" target="_blank" class="btn btn-pmb">
+        <i class='bx bx-user-plus'></i> Pendaftaran Mahasantri Baru
+      </a>
+      <a href="https://maps.google.com/?q=Pesantren+Teknologi+Informasi+dan+Komunikasi+Jombang+YBM+PLN" target="_blank" class="btn btn-maps">
+        <i class='bx bx-map-pin'></i> Lihat Lokasi di Google Maps
+      </a>
+      <a href="https://wa.me/6281393963363" target="_blank" class="btn btn-wa">
+        <i class='bx bxl-whatsapp'></i> Hubungi Kami via WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- 9 Keunggulan Section -->
+  <section class="section-keunggulan" id="keunggulan">
+    <div class="section-header">
+      <h2>9 Keunggulan Utama</h2>
+      <p>Standar pendidikan komprehensif tanpa biaya untuk melahirkan generasi digital masa depan</p>
+    </div>
+
+    <!-- Filter Buttons (Interaktif) -->
+    <div class="filter-wrapper">
+      <button class="filter-btn active" onclick="filterCards('all')">Semua Keunggulan</button>
+      <button class="filter-btn" onclick="filterCards('fasilitas')">Fasilitas & Pembiayaan</button>
+      <button class="filter-btn" onclick="filterCards('akademik')">Kurikulum & Karir</button>
+      <button class="filter-btn" onclick="filterCards('karakter')">Karakter & Sertifikasi</button>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid-keunggulan" id="cardContainer">
+      
+      <!-- 1 -->
+      <div class="card-item" data-category="fasilitas">
+        <span class="card-number">01</span>
+        <div class="card-icon-box icon-green">
+          <i class='bx bx-gift'></i>
+        </div>
+        <h3>Gratis Biaya Pendidikan</h3>
+        <p>Kami menyediakan pendidikan tanpa biaya untuk santri dari keluarga dhuafa dengan seleksi transparan dan berkeadilan.</p>
+      </div>
+
+      <!-- 2 -->
+      <div class="card-item" data-category="fasilitas">
+        <span class="card-number">02</span>
+        <div class="card-icon-box icon-blue">
+          <i class='bx bx-laptop'></i>
+        </div>
+        <h3>Fasilitas IT & Boarding Terbaik</h3>
+        <p>Dengan fasilitas lengkap, asrama yang nyaman, serta laboratorium komputer berkelas terbaik untuk mendukung pembelajaran coding.</p>
+      </div>
+
+      <!-- 3 -->
+      <div class="card-item" data-category="fasilitas">
+        <span class="card-number">03</span>
+        <div class="card-icon-box icon-yellow">
+          <i class='bx bx-wallet'></i>
+        </div>
+        <h3>Uang Saku Selama Masa Pendidikan</h3>
+        <p>Santri mendapatkan uang saku selama masa pendidikan (1 tahun) penuh untuk mendukung kebutuhan hidup sehari-hari secara mandiri.</p>
+      </div>
+
+      <!-- 4 -->
+      <div class="card-item" data-category="akademik">
+        <span class="card-number">04</span>
+        <div class="card-icon-box icon-blue">
+          <i class='bx bx-code-block'></i>
+        </div>
+        <h3>Fokus IT (Digital Marketing & RPL)</h3>
+        <p>Pendidikan difokuskan pada keterampilan digital paling dicari: Digital Marketing dan Pengembangan Perangkat Lunak (Software Engineering).</p>
+      </div>
+
+      <!-- 5 -->
+      <div class="card-item" data-category="karakter">
+        <span class="card-number">05</span>
+        <div class="card-icon-box icon-yellow">
+          <i class='bx bx-award'></i>
+        </div>
+        <h3>Bonus Pelatihan Sertifikasi + Tahfidz</h3>
+        <p>Santri mendapatkan pembekalan pelatihan untuk sertifikasi industri nasional/global serta pembinaan tahfidz Al-Qur'an.</p>
+      </div>
+
+      <!-- 6 -->
+      <div class="card-item" data-category="akademik">
+        <span class="card-number">06</span>
+        <div class="card-icon-box icon-green">
+          <i class='bx bx-briefcase-alt-2'></i>
+        </div>
+        <h3>Satu Tahun Siap Kerja</h3>
+        <p>Santri dipersiapkan secara intensif melalui program link-and-match agar langsung siap terjun bekerja dengan keahlian yang relevan.</p>
+      </div>
+
+      <!-- 7 -->
+      <div class="card-item" data-category="fasilitas">
+        <span class="card-number">07</span>
+        <div class="card-icon-box icon-blue">
+          <i class='bx bx-bus'></i>
+        </div>
+        <h3>Gratis Tiket Berangkat & Pulang</h3>
+        <p>Pemberangkatan dan kepulangan santri ke tempat pendidikan sepenuhnya ditanggung dari domisili asal hingga pesantren.</p>
+      </div>
+
+      <!-- 8 -->
+      <div class="card-item" data-category="karakter">
+        <span class="card-number">08</span>
+        <div class="card-icon-box icon-yellow">
+          <i class='bx bx-book-heart'></i>
+        </div>
+        <h3>Pembinaan Karakter</h3>
+        <p>Santri diberikan pembekalan diniyah ahlus sunnah wal jamaah agar berakhlak mulia, berintegritas tinggi, dan berbudi pekerti luhur.</p>
+      </div>
+
+      <!-- 9 -->
+      <div class="card-item" data-category="akademik">
+        <span class="card-number">09</span>
+        <div class="card-icon-box icon-green">
+          <i class='bx bx-buildings'></i>
+        </div>
+        <h3>Kerjasama Industri & Pendidikan</h3>
+        <p>Kemitraan strategis dengan perusahaan teknologi dan institusi pendidikan unggulan untuk memperluas jenjang karir santri.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer id="kontak">
+    <div class="footer-grid">
+      <!-- Address -->
+      <div class="footer-about">
+        <h3>Alamat Kampus</h3>
+        <p style="font-weight: 700; color: #fff;">Pesantren Teknologi Informasi dan Komunikasi Jombang YBM PLN</p>
+        <div class="footer-address">
+          <i class='bx bx-current-location'></i>
+          <span>Jl. KH. Bisri Syansuri, RT.001/RW.005, Plosogeneng, Kec. Jombang, Kabupaten Jombang, Jawa Timur 61416</span>
+        </div>
+      </div>
+
+      <!-- Social & Contact Information -->
+      <div class="footer-info">
+        <h3>Informasi & Media Sosial</h3>
+        <a href="https://instagram.com/petik_jombang" target="_blank" class="contact-item">
+          <i class='bx bxl-instagram'></i> Instagram: @petik_jombang
+        </a>
+        <a href="https://youtube.com/@tvpetikjombang" target="_blank" class="contact-item">
+          <i class='bx bxl-youtube'></i> Youtube: @tvpetikjombang
+        </a>
+        <a href="https://facebook.com/PetikJombang" target="_blank" class="contact-item">
+          <i class='bx bxl-facebook-circle'></i> Facebook: @Petik Jombang
+        </a>
+        <a href="https://wa.me/6281393963363" target="_blank" class="contact-item">
+          <i class='bx bxl-whatsapp'></i> WhatsApp: (+62 813-9396-3363)
+        </a>
+        <a href="mailto:petikjombang@gmail.com" class="contact-item">
+          <i class='bx bx-envelope'></i> Email: petikjombang@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <p>&copy; 2026 PeTIK II Jombang YBM PLN. All Rights Reserved.</p>
+      <p>Mencetak Santri IT Berakhlak Mulia & Berdaya Saing Global.</p>
+    </div>
+  </footer>
+
+  <!-- Interaktif Script: Filter Kartu Keunggulan -->
+  <script>
+    function filterCards(category) {
+      // Toggle button active state
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Filter cards
+      const cards = document.querySelectorAll('.card-item');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+          card.style.opacity = '1';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
