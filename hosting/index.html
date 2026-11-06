@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRSYAD CV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f24;
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Interactive Particle & Starfield Canvas */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient Glow Spheres */
+        .glow-sphere {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+            animation: pulseGlow 8s ease-in-out infinite alternate;
+        }
+
+        .glow-purple {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #7c3aed 0%, rgba(124, 58, 237, 0) 70%);
+            top: -100px;
+            right: -50px;
+        }
+
+        .glow-blue {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, #2563eb 0%, rgba(37, 99, 235, 0) 70%);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.15) translate(30px, -20px); }
+        }
+
+        /* Container Layout diperluas */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 24px 40px;
+        }
+
+        /* Hero Two-Column Layout */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .hero-left {
+            flex: 1;
+        }
+
+        .hero-right {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Typography */
+        .greeting {
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .main-name {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.15;
+            background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 50%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        #judul {
+            font-size: 1.4rem;
+            color: #38bdf8;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        /* Natural Casual Photo Frame */
+        .photo-card {
+            width: 220px;
+            height: 280px;
+            border-radius: 24px;
+            padding: 6px;
+            background: linear-gradient(145deg, rgba(168, 85, 247, 0.4), rgba(59, 130, 246, 0.15));
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(139, 92, 246, 0.25);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+            position: relative;
+        }
+
+        .photo-card:hover {
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.7), 0 0 35px rgba(168, 85, 247, 0.45);
+        }
+
+        .photo-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #0f172a;
+            position: relative;
+        }
+
+        .photo-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Content Sections Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+            gap: 24px;
+        }
+
+        /* Glassmorphic Interactive Card */
+        .card {
+            background: rgba(18, 24, 54, 0.55);
+            border: 1px solid rgba(139, 92, 246, 0.22);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.15s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card:hover {
+            border-color: rgba(168, 85, 247, 0.45);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Section Headings */
+        h2 {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 36px;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #a855f7, #38bdf8);
+        }
+
+        h4 {
+            color: #cbd5e1;
+            font-weight: 400;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Interactive Skill Bars (HTML, CSS, JS) */
+        .skill-progress-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .skill-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .skill-percent {
+            color: #38bdf8;
+            font-family: monospace;
+            font-size: 0.95rem;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #8b5cf6, #38bdf8);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+            transition: width 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .card:hover .progress-fill {
+            filter: brightness(1.15);
+        }
+
+        /* Tech Skills Tags */
+        .tech-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tech-item {
+            background: rgba(139, 92, 246, 0.15);
+            color: #ddd6fe;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 7px 15px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            background: rgba(168, 85, 247, 0.3);
+            border-color: #c084fc;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Timeline Items */
+        .timeline-list {
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .timeline-list::before {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 6px;
+            bottom: 6px;
+            width: 2px;
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #38bdf8;
+            box-shadow: 0 0 8px #38bdf8;
+        }
+
+        .item-role {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .item-company {
+            font-size: 0.85rem;
+            color: #a855f7;
+            margin-bottom: 4px;
+        }
+
+        .item-desc {
+            font-size: 0.88rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* Soft Skills (.belajar) */
+        .soft-skills-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .belajar {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            transition: all 0.25s ease;
+            cursor: default;
+        }
+
+        .belajar::before {
+            content: '✦';
+            color: #a855f7;
+            margin-right: 12px;
+            font-size: 0.85rem;
+            transition: transform 0.3s ease;
+        }
+
+        .belajar:hover {
+            background: rgba(139, 92, 246, 0.12);
+            border-color: rgba(168, 85, 247, 0.35);
+            transform: translateX(4px);
+        }
+
+        .belajar:hover::before {
+            transform: scale(1.3) rotate(45deg);
+            color: #38bdf8;
+        }
+
+        /* Footer & Contact Section */
+        footer {
+            position: relative;
+            z-index: 1;
+            margin-top: 50px;
+            border-top: 1px solid rgba(139, 92, 246, 0.25);
+            background: rgba(11, 15, 36, 0.75);
+            backdrop-filter: blur(16px);
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #f1f5f9;
+        }
+
+        .footer-desc {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            max-width: 500px;
+        }
+
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 6px;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(18, 24, 54, 0.7);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 12px;
+            color: #f1f5f9;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            transition: transform 0.3s ease;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px -3px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Custom Social Accents */
+        .social-btn.ig:hover { border-color: #e1306c; color: #f472b6; }
+        .social-btn.fb:hover { border-color: #1877f2; color: #60a5fa; }
+        .social-btn.wa:hover { border-color: #25d366; color: #4ade80; }
+        .social-btn.mail:hover { border-color: #ea4335; color: #f87171; }
+
+        .social-btn:hover svg {
+            transform: scale(1.15);
+        }
+
+        .copyright {
+            margin-top: 15px;
+            font-size: 0.82rem;
+            color: #64748b;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+
+            .hero-left {
+                order: 2;
+            }
+
+            .hero-right {
+                order: 1;
+            }
+
+            h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Animated Particle Canvas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Ambient Glowing Spheres -->
+    <div class="glow-sphere glow-purple"></div>
+    <div class="glow-sphere glow-blue"></div>
+
+    <div class="container">
+
+        <!-- Hero Section: Identity on Left, Photo on Right -->
+        <section class="hero">
+            <div class="hero-left">
+                <p class="greeting">HELLO, It's me</p>
+                <h1 class="main-name">M. IRSYAD ABIYASA</h1>
+                <h2 id="judul">Software Engineer</h2>
+            </div>
+            
+            <div class="hero-right">
+                <div class="photo-card" id="tiltPhoto">
+                    <div class="photo-inner">
+                        <img src="Pas foto .png" alt="M. IRSYAD ABIYASA">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Cards Grid -->
+        <div class="grid">
+
+            <!-- Card 1: About Me -->
+            <div class="card tilt-card">
+                <h2>About me</h2>
+                <h4>Saya adalah pelajar yang sedang mendalami Software Engineering dengan fokus pada pengembangan antarmuka web interaktif serta arsitektur backend yang efisien. Memiliki semangat tinggi dalam memecahkan masalah melalui kode dan teknologi modern.</h4>
+            </div>
+
+            <!-- Card 2: Technical Skills & Interactive Progress Bars -->
+            <div class="card tilt-card">
+                <h2>Technical Proficiency</h2>
+                
+                <!-- Persentase Kemampuan Interaktif -->
+                <div class="skill-progress-container">
+                    <div class="skill-bar-wrapper">
+                        <div class="skill-header">
+                            <span>HTML5 Semantic & SEO</span>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: 90%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-bar-wrapper">
+                        <div class="skill-header">
+                            <span>CSS3, Flexbox & Grid Animations</span>
+                            <span class="skill-percent">85%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-bar-wrapper">
+                        <div class="skill-header">
+                            <span>JavaScript (ES6+ & DOM Interactivity)</span>
+                            <span class="skill-percent">78%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: 78%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tag Tools Lainnya -->
+                <div class="tech-skills">
+                    <span class="tech-item">Python</span>
+                    <span class="tech-item">Flask</span>
+                    <span class="tech-item">SQLite</span>
+                    <span class="tech-item">Git & GitHub</span>
+                    <span class="tech-item">Responsive UI</span>
+                </div>
+            </div>
+
+            <!-- Card 3: Experience -->
+            <div class="card tilt-card">
+                <h2>Experience</h2>
+                <ul class="timeline-list">
+                    <li class="timeline-item">
+                        <div class="item-role">Web Development Practice & Projects</div>
+                        <div class="item-company">PeTIK II Jombang • 2026 - Sekarang</div>
+                        <div class="item-desc">Merancang serta mengembangkan berbagai aplikasi web interaktif, layout responsif, dan logika backend dasar menggunakan teknologi Python & Flask.</div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="item-role">Creative & Presentation Design</div>
+                        <div class="item-company">School Design Team • 2025 - 2026</div>
+                        <div class="item-desc">Berkolaborasi dalam tim perancangan materi visual, presentasi teknis, dan aset media antarmuka pengguna secara konsisten.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Card 4: Featured Projects -->
+            <div class="card tilt-card">
+                <h2>Featured Projects</h2>
+                <ul class="timeline-list">
+                    <li class="timeline-item">
+                        <div class="item-role">Library Management System (Pustaka Lestari)</div>
+                        <div class="item-company">Flask • SQLite • Modern CSS</div>
+                        <div class="item-desc">Aplikasi peminjaman buku perpustakaan berbasis web dengan fitur manajemen katalog, pelacakan peminjam, dan antarmuka bertema modern.</div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="item-role">Interactive Personal CV & Portfolio</div>
+                        <div class="item-company">HTML5 • CSS3 • JavaScript</div>
+                        <div class="item-desc">Website CV personal dengan efek kanvas partikel dinamis dan interaksi kartu 3D tilt.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Card 5: Education -->
+            <div class="card tilt-card">
+                <h2>Education</h2>
+                <ul class="timeline-list">
+                    <li class="timeline-item">
+                        <div class="item-role">Software Engineering</div>
+                        <div class="item-company">PeTIK II Jombang • Jawa Timur</div>
+                        <div class="item-desc">Fokus pada algoritma pemrograman, rekayasa perangkat lunak, pemrograman web front-end & back-end, serta basis data.</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Card 6: Another Skills (Soft Skills) -->
+            <div class="card tilt-card">
+                <h2>Another Skills</h2>
+                <div class="soft-skills-grid">
+                    <h3 class="belajar">High Curiosity & Problem Solving</h3>
+                    <h3 class="belajar">Creativity & Visual Aesthetics</h3>
+                    <h3 class="belajar">Effective Communication</h3>
+                    <h3 class="belajar">Goal-Oriented Mindset</h3>
+                    <h3 class="belajar">Leadership & Team Collaboration</h3>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer Kontak dengan Instagram, Facebook, WhatsApp, & Email -->
+    <footer>
+        <div class="footer-content">
+            <h3 class="footer-title">Let's Connect & Collaborate</h3>
+            <p class="footer-desc">Tertarik berkolaborasi atau memiliki pertanyaan seputar proyek rekayasa perangkat lunak? Hubungi saya melalui media di bawah ini:</p>
+            
+            <div class="social-links">
+                <!-- Instagram -->
+                <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" class="social-btn ig">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    <span>Instagram</span>
+                </a>
+
+                <!-- Facebook -->
+                <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" class="social-btn fb">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span>Facebook</span>
+                </a>
+
+                <!-- WhatsApp -->
+                <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="social-btn wa">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                    </svg>
+                    <span>WhatsApp</span>
+                </a>
+
+                <!-- Email -->
+                <a href="mailto:abiyasairsyad08@gmail.com" class="social-btn mail">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l9.518 7.713 9.518-7.713v11.817h-19.036z"/>
+                    </svg>
+                    <span>Email</span>
+                </a>
+            </div>
+
+            <p class="copyright">© 2026 M. Irsyad Abiyasa. Built with passion & precision.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript: Particle Canvas & 3D Tilt Dynamics -->
+    <script>
+        // --- 1. Interactive Starfield / Particle Background ---
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        let particles = [];
+        const particleCount = 45;
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 2 + 0.5,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: (Math.random() - 0.5) * 0.35,
+                    alpha: Math.random() * 0.6 + 0.2,
+                    color: Math.random() > 0.5 ? 'rgba(168, 85, 247,' : 'rgba(56, 189, 248,'
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0) p.x = width;
+                if (p.x > width) p.x = 0;
+                if (p.y < 0) p.y = height;
+                if (p.y > height) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color + p.alpha + ')';
+                ctx.fill();
+
+                // Draw soft connections between close particles
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 110) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${0.15 * (1 - dist / 110)})`;
+                        ctx.lineWidth = 0.6;
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // --- 2. Interactive 3D Tilt Effect on Cards & Photo ---
+        const tiltElements = document.querySelectorAll('.tilt-card, #tiltPhoto');
+
+        tiltElements.forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -7;
+                const rotateY = ((x - centerX) / centerX) * 7;
+                
+                el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            });
+
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
