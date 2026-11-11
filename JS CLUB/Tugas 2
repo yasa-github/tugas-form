@@ -1,0 +1,11 @@
+// Deklarasi dan inisialisasi variabel nilai ujian
+let nilai = 70;
+
+// Tampilkan nilai awal
+console.log("Nilai awal:", nilai);
+
+// Ubah nilainya menjadi 85 tanpa kata kunci let
+nilai = 85;
+
+// Tampilkan nilai baru
+console.log("Nilai baru:", nilai);
