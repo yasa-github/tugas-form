@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jihandika Hakam | Executive Sales & Growth Dashboard</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            navy: {
+              950: '#060d17',
+              900: '#0a192f',
+              800: '#112240',
+              700: '#1b3258',
+              600: '#233554',
+              500: '#324b75',
+            },
+            accent: {
+              blue: '#2563eb',
+              cyan: '#06b6d4',
+              glow: '#38bdf8',
+            }
+          },
+          boxShadow: {
+            'glow-sm': '0 0 15px rgba(56, 189, 248, 0.25)',
+            'glow-lg': '0 0 30px rgba(37, 99, 235, 0.35)',
+            'card-glass': '0 8px 32px 0 rgba(10, 25, 47, 0.06)',
+            'dark-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Ambient Futuristic Grid & Glow */
+    .bg-cyber-grid {
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.06) 0%, transparent 40%),
+        linear-gradient(to right, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+    }
+
+    /* Trailing Cursor Canvas */
+    #cursor-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Glass Panels */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .navy-glass {
+      background: linear-gradient(135deg, rgba(10, 25, 47, 0.96) 0%, rgba(17, 34, 64, 0.94) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    /* Hologram Pulse */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.08); opacity: 0.3; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .pulse-indicator {
+      animation: pulse-ring 2.5s infinite ease-in-out;
+    }
+
+    /* Slide In Transition for views */
+    .view-content {
+      display: none;
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .view-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Custom Toast Message */
+    #toast {
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform: translateY(120%);
+    }
+    #toast.show {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-cyber-grid bg-slate-50 text-slate-800 antialiased min-h-screen selection:bg-accent-blue selection:text-white flex flex-col">
+
+  <!-- Interactive Glowing Trailing Canvas -->
+  <canvas id="cursor-canvas"></canvas>
+
+  <!-- Top Futuristic Control Bar -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Logo & Status -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-navy-900 text-white flex items-center justify-center font-bold font-mono border border-cyan-400/40 shadow-glow-sm relative">
+          <span>JH</span>
+          <span class="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-bold tracking-tight text-navy-900">JIHANDIKA HAKAM</span>
+            <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+              Open to Opportunities
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 flex items-center gap-1.5 font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-ping"></span>
+            SYS: SALES_OP_V2.6 // GARUT, ID
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Action Commands -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Live Search Field -->
+        <div class="relative hidden md:block w-48 lg:w-64">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input 
+            type="text" 
+            id="global-search" 
+            placeholder="Search role, skills, keywords..."
+            class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-100 hover:bg-slate-200/70 focus:bg-white border border-slate-200 rounded-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-accent-blue/30 focus:border-accent-blue transition-all"
+          />
+        </div>
+
+        <!-- Download CV / Print -->
+        <button 
+          onclick="window.print()" 
+          title="Export / Print Clean Document"
+          class="px-3 py-2 text-xs font-semibold text-slate-700 hover:text-navy-900 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl shadow-sm transition-all flex items-center gap-1.5 active:scale-95">
+          <i class="fa-solid fa-file-pdf text-rose-500"></i>
+          <span class="hidden sm:inline">PDF Export</span>
+        </button>
+
+        <!-- Quick Copy Email Button -->
+        <button 
+          onclick="copyToClipboard('jihandikahakam.jha@gmail.com', 'Email copied to clipboard!')" 
+          class="px-3.5 py-2 text-xs font-semibold text-white bg-gradient-to-r from-navy-900 to-navy-800 hover:from-navy-800 hover:to-navy-700 border border-cyan-400/30 rounded-xl shadow-glow-sm transition-all flex items-center gap-2 active:scale-95">
+          <i class="fa-solid fa-paper-plane text-accent-glow"></i>
+          <span>Connect</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- SIDEBAR: Profile & Nav (Col 1 - 4 on lg) -->
+    <aside class="lg:col-span-4 space-y-6">
+      
+      <!-- Executive ID Card (Navy Glass Highlight) -->
+      <div class="navy-glass rounded-2xl p-6 text-white relative overflow-hidden shadow-2xl">
+        <div class="absolute -right-16 -top-16 w-48 h-48 bg-accent-blue/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="relative z-10">
+          <div class="flex items-start justify-between mb-5">
+            <div class="relative">
+              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-300 p-1 shadow-lg shadow-black/40">
+                <div class="w-full h-full bg-navy-900 rounded-xl flex items-center justify-center text-accent-glow text-3xl font-extrabold font-mono border border-cyan-400/30">
+                  JH
+                </div>
+              </div>
+              <span class="absolute -bottom-1 -right-1 flex h-4 w-4">
+                <span class="pulse-indicator absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-4 w-4 bg-cyan-500 border-2 border-navy-900"></span>
+              </span>
+            </div>
+
+            <div class="text-right font-mono">
+              <span class="text-[10px] text-cyan-300/80 uppercase tracking-widest block">Security Status</span>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">VERIFIED PRO</span>
+            </div>
+          </div>
+
+          <h2 class="text-2xl font-bold tracking-tight text-white mb-1">Jihandika Hakam</h2>
+          <p class="text-sm font-semibold text-cyan-400 flex items-center gap-2 mb-4">
+            <i class="fa-solid fa-chart-line text-xs"></i> Area Sales Manager
+          </p>
+
+          <p class="text-xs text-slate-300 leading-relaxed mb-5 border-l-2 border-accent-glow/50 pl-3">
+            Spesialis penetrasi pasar properti & telekomunikasi berbasis analisis performa, eksekusi strategi terpadu, dan negosiasi korporat bernilai tinggi.
+          </p>
+
+          <!-- Contact details badges -->
+          <div class="space-y-2.5 text-xs text-slate-300 pt-2 border-t border-slate-700/60 font-mono">
+            <div class="flex items-center justify-between group cursor-pointer" onclick="copyToClipboard('Kabupaten Garut, Jawa Barat', 'Lokasi disalin!')">
+              <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-map-pin text-rose-400 w-4"></i> BASE:</span>
+              <span class="text-white group-hover:text-cyan-300 transition-colors">Garut, Jawa Barat</span>
+            </div>
+            <div class="flex items-center justify-between group cursor-pointer" onclick="copyToClipboard('+6285784456040', 'Nomor telepon disalin!')">
+              <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-phone text-emerald-400 w-4"></i> CALL:</span>
+              <span class="text-white group-hover:text-cyan-300 transition-colors">+62 857-8445-6040</span>
+            </div>
+            <div class="flex items-center justify-between group cursor-pointer" onclick="copyToClipboard('jihandikahakam.jha@gmail.com', 'Email disalin!')">
+              <span class="text-slate-400 flex items-center gap-2"><i class="fa-solid fa-envelope text-accent-glow w-4"></i> EMAIL:</span>
+              <span class="text-white group-hover:text-cyan-300 transition-colors truncate max-w-[170px]">jihandikahakam.jha@gmail.com</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-400 flex items-center gap-2"><i class="fa-brands fa-youtube text-red-500 w-4"></i> MEDIA:</span>
+              <a href="https://youtube.com/@jihandikahakam9049" target="_blank" class="text-cyan-300 hover:text-white underline flex items-center gap-1">
+                @jihandikahakam9049 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="grid grid-cols-2 gap-2 mt-5">
+            <a href="mailto:jihandikahakam.jha@gmail.com" class="py-2 px-3 text-center rounded-xl bg-accent-blue hover:bg-blue-600 text-white font-medium text-xs transition shadow-sm flex items-center justify-center gap-1.5">
+              <i class="fa-regular fa-envelope"></i> Kirim Pesan
+            </a>
+            <a href="https://wa.me/6285784456040" target="_blank" class="py-2 px-3 text-center rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs transition shadow-sm flex items-center justify-center gap-1.5">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Navigation Modules -->
+      <div class="glass-panel rounded-2xl p-3 shadow-card-glass">
+        <div class="text-[11px] font-bold tracking-wider text-slate-400 uppercase px-3 py-2">
+          Navigation Modules
+        </div>
+        <nav class="space-y-1" id="nav-tabs">
+          <button data-target="overview" class="nav-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-navy-900 text-white shadow-md">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-gauge-high text-accent-glow w-4 text-center"></i>
+              Executive Overview
+            </span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-cyan-200">KPI</span>
+          </button>
+
+          <button data-target="experience" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-navy-900">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-briefcase text-slate-400 group-hover:text-accent-blue w-4 text-center"></i>
+              Work Experiences
+            </span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600">6 Roles</span>
+          </button>
+
+          <button data-target="education" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-navy-900">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-graduation-cap text-slate-400 w-4 text-center"></i>
+              Education & Leadership
+            </span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600">S1</span>
+          </button>
+
+          <button data-target="skills" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-navy-900">
+            <span class="flex items-center gap-3">
+              <i class="fa-solid fa-bolt text-slate-400 w-4 text-center"></i>
+              Skills Matrix & Tools
+            </span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600">14+</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Quick Interactive Widget: Sales Dial / Core Strengths -->
+      <div class="glass-panel rounded-2xl p-5 shadow-card-glass border-l-4 border-l-accent-blue">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center justify-between">
+          <span>Strategic Competencies</span>
+          <i class="fa-solid fa-circle-check text-accent-blue"></i>
+        </h3>
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-slate-700">B2B & Corporate Negotiation</span>
+              <span class="text-navy-900 font-mono">95%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div class="bg-gradient-to-r from-accent-blue to-cyan-500 h-full rounded-full transition-all duration-1000" style="width: 95%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-slate-700">Team Coaching & Joint Visits</span>
+              <span class="text-navy-900 font-mono">90%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div class="bg-gradient-to-r from-accent-blue to-cyan-500 h-full rounded-full transition-all duration-1000" style="width: 90%"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span class="text-slate-700">Credit Control & AR Health</span>
+              <span class="text-navy-900 font-mono">88%</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div class="bg-gradient-to-r from-accent-blue to-cyan-500 h-full rounded-full transition-all duration-1000" style="width: 88%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- MAIN DASHBOARD CONTENT (Col 5 - 12 on lg) -->
+    <div class="lg:col-span-8 space-y-6">
+
+      <!-- ================= VIEW 1: OVERVIEW ================= -->
+      <section id="view-overview" class="view-content active space-y-6">
+        
+        <!-- Metrics Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <!-- Metric 1 -->
+          <div class="glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200/80 group">
+            <div class="flex items-center justify-between text-slate-500 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider">Revenue Impact</span>
+              <div class="w-8 h-8 rounded-lg bg-blue-50 text-accent-blue flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-arrow-trend-up text-sm"></i>
+              </div>
+            </div>
+            <div class="text-3xl font-extrabold text-navy-900 font-mono flex items-baseline gap-1">
+              <span>+10</span><span class="text-accent-blue text-2xl">%</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Peningkatan pendapatan melalui negosiasi korporat.</p>
+          </div>
+
+          <!-- Metric 2 -->
+          <div class="glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200/80 group">
+            <div class="flex items-center justify-between text-slate-500 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider">Service Accuracy</span>
+              <div class="w-8 h-8 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-bullseye text-sm"></i>
+              </div>
+            </div>
+            <div class="text-3xl font-extrabold text-navy-900 font-mono flex items-baseline gap-1">
+              <span>100</span><span class="text-cyan-600 text-2xl">%</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Akurasi rekomendasi alokasi bandwidth & Wi-Fi.</p>
+          </div>
+
+          <!-- Metric 3 -->
+          <div class="glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200/80 group">
+            <div class="flex items-center justify-between text-slate-500 mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider">Retention Boost</span>
+              <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-users text-sm"></i>
+              </div>
+            </div>
+            <div class="text-3xl font-extrabold text-navy-900 font-mono flex items-baseline gap-1">
+              <span>+10</span><span class="text-emerald-600 text-2xl">%</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">Tingkat retensi pelanggan berkat respon cepat.</p>
+          </div>
+        </div>
+
+        <!-- Executive Summary Glass Card -->
+        <div class="glass-panel rounded-2xl p-6 shadow-card-glass relative overflow-hidden">
+          <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+            <h3 class="text-base font-bold text-navy-900 flex items-center gap-2">
+              <i class="fa-solid fa-terminal text-accent-blue text-sm"></i> Executive Summary
+            </h3>
+            <span class="text-[11px] font-mono text-slate-400">STATUS: ACTIVE RECORD</span>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-4 text-justify">
+            Profesional Sales dengan rekam jejak multidisiplin di sektor telekomunikasi, properti komersial, dan manajemen operasional lembaga. Memiliki latar belakang pendidikan <strong>Ekonomi Syariah (STIE STEMBI)</strong> yang memperkuat analisis fundamental pasar, manajemen risiko, etika bisnis, dan pengelolaan arus kas (Credit Control).
+          </p>
+          <p class="text-slate-600 text-sm leading-relaxed text-justify">
+            Berpengalaman dalam memimpin morning briefing harian, coaching sales force, joint visit lapangan, merancang taktik pertempuran pasar di tingkat regional, serta membangun relasi jangka panjang dengan key-clients korporasi.
+          </p>
+
+          <!-- Core Pillar Chips -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-5 pt-4 border-t border-slate-100">
+            <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl text-center">
+              <i class="fa-solid fa-chart-pie text-accent-blue text-base mb-1 block"></i>
+              <span class="text-xs font-bold text-navy-900 block">Market Intel</span>
+              <span class="text-[10px] text-slate-400">Analisis Pesaing</span>
+            </div>
+            <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl text-center">
+              <i class="fa-solid fa-boxes-stacked text-cyan-600 text-base mb-1 block"></i>
+              <span class="text-xs font-bold text-navy-900 block">Distribution</span>
+              <span class="text-[10px] text-slate-400">Zero Stockout</span>
+            </div>
+            <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl text-center">
+              <i class="fa-solid fa-handshake-angle text-emerald-600 text-base mb-1 block"></i>
+              <span class="text-xs font-bold text-navy-900 block">B2B Deals</span>
+              <span class="text-[10px] text-slate-400">Margin Optimal</span>
+            </div>
+            <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl text-center">
+              <i class="fa-solid fa-receipt text-amber-600 text-base mb-1 block"></i>
+              <span class="text-xs font-bold text-navy-900 block">Credit Control</span>
+              <span class="text-[10px] text-slate-400">AR Stabilitas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Featured Recent Roles Highlight -->
+        <div class="glass-panel rounded-2xl p-6 shadow-card-glass">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base font-bold text-navy-900 flex items-center gap-2">
+              <i class="fa-solid fa-satellite-dish text-cyan-500 text-sm"></i> Live Operations
+            </h3>
+            <button onclick="switchTab('experience')" class="text-xs font-semibold text-accent-blue hover:underline">
+              Lihat Semua (6) &rarr;
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Active Job 1 -->
+            <div class="p-4 rounded-xl border border-slate-200/90 hover:border-accent-blue/50 hover:bg-blue-50/30 transition-all cursor-pointer group" onclick="openDetailModal('ekamas-asm')">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-sm text-navy-900 group-hover:text-accent-blue transition">Area Sales Manager</span>
+                    <span class="px-2 py-0.5 text-[10px] font-mono font-semibold bg-emerald-100 text-emerald-800 rounded-md">CURRENT</span>
+                  </div>
+                  <div class="text-xs font-medium text-slate-500 mt-0.5">PT Ekamas Mora Republik Tbk. • Kontrak</div>
+                </div>
+                <span class="text-xs font-mono text-slate-400">Sep 2025 - Sekarang</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-2 line-clamp-2">
+                Memecah target korporat menjadi target operasional per tim, joint visit lapangan, manajemen stok distributor, dan kendali penagihan (AR).
+              </p>
+            </div>
+
+            <!-- Active Job 2 -->
+            <div class="p-4 rounded-xl border border-slate-200/90 hover:border-accent-blue/50 hover:bg-blue-50/30 transition-all cursor-pointer group" onclick="openDetailModal('ekamas-ae')">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-sm text-navy-900 group-hover:text-accent-blue transition">Account Executive</span>
+                    <span class="px-2 py-0.5 text-[10px] font-mono font-semibold bg-blue-100 text-blue-800 rounded-md">FREELANCE</span>
+                  </div>
+                  <div class="text-xs font-medium text-slate-500 mt-0.5">PT Eka Mas Republik • Internet Provider</div>
+                </div>
+                <span class="text-xs font-mono text-slate-400">Jul 2025 - Sekarang</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-2 line-clamp-2">
+                Canvassing B2B & residensial, analisis kapasitas bandwidth akurasi 100%, penyusunan proposal, dan pengawalan retensi pengguna.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= VIEW 2: EXPERIENCE ================= -->
+      <section id="view-experience" class="view-content space-y-6">
+        
+        <!-- Filter Controls -->
+        <div class="glass-panel rounded-2xl p-4 shadow-card-glass flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Filter Sector:</span>
+            <div class="flex flex-wrap gap-1.5" id="exp-filters">
+              <button onclick="filterExperience('all', this)" class="filter-chip px-3 py-1 rounded-lg text-xs font-semibold bg-navy-900 text-white">All (6)</button>
+              <button onclick="filterExperience('sales', this)" class="filter-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700">Sales & Telecom</button>
+              <button onclick="filterExperience('property', this)" class="filter-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700">Property</button>
+              <button onclick="filterExperience('management', this)" class="filter-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700">Institutional</button>
+            </div>
+          </div>
+          <span class="text-xs text-slate-400 font-mono" id="exp-count-label">Showing 6 Experiences</span>
+        </div>
+
+        <!-- Experience Interactive Cards Container -->
+        <div class="space-y-4" id="experience-list">
+
+          <!-- Item 1 -->
+          <div class="exp-card glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200 cursor-pointer group" data-category="sales" onclick="openDetailModal('ekamas-asm')">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-base text-navy-900 group-hover:text-accent-blue transition">Area Sales Manager (Kontrak)</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800 rounded">ACTIVE</span>
+              </div>
+              <span class="text-xs font-mono font-medium text-accent-blue bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60 w-fit">
+                Sep 2025 - Sekarang
+              </span>
+            </div>
+            <div class="text-xs font-semibold text-slate-600 mb-3 flex items-center gap-1.5">
+              <i class="fa-regular fa-building text-slate-400"></i> PT Ekamas Mora Republik Tbk.
+            </div>
+            <ul class="space-y-1.5 text-xs text-slate-600 list-disc list-inside">
+              <li><strong>Pencapaian Target & Analisis Penjualan:</strong> Memecah target korporat menjadi sasaran taktis operasional tim per wilayah.</li>
+              <li><strong>Supervisi & Pengembangan:</strong> Memimpin briefing harian, coaching intensif, dan kunjungan lapangan bersama (joint visit).</li>
+              <li><strong>Manajemen Distribusi & Stok:</strong> Menjamin suplai distributor lancar guna menekan risiko kelangkaan (*out of stock*).</li>
+              <li><strong>Kendali Piutang (Credit Control):</strong> Mengontrol penagihan AR demi kestabilan arus kas operasional daerah.</li>
+            </ul>
+            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-accent-blue font-semibold">
+              <span>Klik untuk deep-dive metrik & hasil &rarr;</span>
+              <span class="font-mono text-slate-400">REF: EKAMAS-ASM</span>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="exp-card glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200 cursor-pointer group" data-category="sales" onclick="openDetailModal('ekamas-ae')">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-base text-navy-900 group-hover:text-accent-blue transition">Account Executive (Freelance)</span>
+                <span class="px-2 py-0.5 text-[10px] font-mono font-bold bg-blue-100 text-blue-800 rounded">ACTIVE</span>
+              </div>
+              <span class="text-xs font-mono font-medium text-accent-blue bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60 w-fit">
+                Jul 2025 - Sekarang
+              </span>
+            </div>
+            <div class="text-xs font-semibold text-slate-600 mb-3 flex items-center gap-1.5">
+              <i class="fa-regular fa-building text-slate-400"></i> PT Eka Mas Republik
+            </div>
+            <ul class="space-y-1.5 text-xs text-slate-600 list-disc list-inside">
+              <li>Canvassing & presentasi intensif kepada klien residensial serta korporasi.</li>
+              <li>Menganalisis kebutuhan bandwidth dan geolokasi pelanggan dengan tingkat akurasi 100%.</li>
+              <li>Menyusun proposal komersial, kontrak berlangganan, serta pengawalan retensi pelanggan (+10%).</li>
+            </ul>
+            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-accent-blue font-semibold">
+              <span>Detail proposal & kontrak &rarr;</span>
+              <span class="font-mono text-slate-400">REF: EKAMAS-AE</span>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="exp-card glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200 cursor-pointer group" data-category="management" onclick="openDetailModal('misykah')">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+              <span class="font-bold text-base text-navy-900 group-hover:text-accent-blue transition">Guru Pesantren (Full-Time)</span>
+              <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full w-fit">Jan 2025 - Jul 2025</span>
+            </div>
+            <div class="text-xs font-semibold text-slate-600 mb-2 flex items-center gap-1.5">
+              <i class="fa-solid fa-school text-slate-400"></i> Pesantren Al-misykah Islamic Boarding School
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Menyusun rencana kurikulum kaligrafi dan tajwid, membimbing seni tulis Arab, tilawah Al-Quran secara personal, serta melakukan pembinaan karakter dan disiplin santri secara konsisten.
+            </p>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="exp-card glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200 cursor-pointer group" data-category="management" onclick="openDetailModal('arrisalah')">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+              <span class="font-bold text-base text-navy-900 group-hover:text-accent-blue transition">Daily Manager (Full-Time)</span>
+              <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full w-fit">Des 2023 - Jan 2024</span>
+            </div>
+            <div class="text-xs font-semibold text-slate-600 mb-2 flex items-center gap-1.5">
+              <i class="fa-solid fa-landmark text-slate-400"></i> Yayasan Ar-Risalah Hidayatullah
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Mengontrol alur operasional kegiatan harian yayasan, memimpin sinkronisasi kerja antara asatidz, pengurus, dan staf demi ketercapaian target kurikulum internal dan evaluasi berkala.
+            </p>
+          </div>
+
+          <!-- Item 5 -->
+          <div class="exp-card glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200 cursor-pointer group" data-category="property" onclick="openDetailModal('properti')">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+              <span class="font-bold text-base text-navy-900 group-hover:text-accent-blue transition">Property Consultant (Full-Time)</span>
+              <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full w-fit">Okt 2021 - Des 2023</span>
+            </div>
+            <div class="text-xs font-semibold text-slate-600 mb-2 flex items-center gap-1.5">
+              <i class="fa-solid fa-house-chimney text-slate-400"></i> Pesantren Properti Indonesia
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Konsultan investasi properti komprehensif, negosiasi harga terbaik menjaga margin korporasi, serta memproduksi konten edukasi digital untuk percepatan konversi penjualan unit.
+            </p>
+          </div>
+
+          <!-- Item 6 -->
+          <div class="exp-card glass-panel rounded-2xl p-5 hover:shadow-lg transition-all border border-slate-200 cursor-pointer group" data-category="management" onclick="openDetailModal('madani')">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+              <span class="font-bold text-base text-navy-900 group-hover:text-accent-blue transition">Manajer Asrama (Full-Time)</span>
+              <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full w-fit">Jan 2021 - Sep 2022</span>
+            </div>
+            <div class="text-xs font-semibold text-slate-600 mb-2 flex items-center gap-1.5">
+              <i class="fa-solid fa-hotel text-slate-400"></i> Rumah Qur'an Madani
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Pengelolaan SOP logistik dan fasilitas asrama, penyusunan laporan bulanan performa santri ke jajaran pusat, dan penjagaan standar kedisiplinan lingkungan hunian.
+            </p>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ================= VIEW 3: EDUCATION & LEADERSHIP ================= -->
+      <section id="view-education" class="view-content space-y-6">
+        
+        <div class="glass-panel rounded-2xl p-6 shadow-card-glass">
+          <div class="flex items-center justify-between mb-6 pb-3 border-b border-slate-200">
+            <div>
+              <h3 class="text-lg font-bold text-navy-900">Pendidikan Formal</h3>
+              <p class="text-xs text-slate-500">Fondasi analitis ekonomi, bisnis syariah, dan kepemimpinan.</p>
+            </div>
+            <i class="fa-solid fa-award text-2xl text-accent-blue"></i>
+          </div>
+
+          <div class="space-y-6">
+            <!-- STEMBI -->
+            <div class="relative pl-6 border-l-2 border-accent-blue pb-4">
+              <span class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-accent-blue border-4 border-white shadow-sm"></span>
+              <div class="flex flex-wrap items-baseline justify-between gap-1 mb-1">
+                <h4 class="text-base font-bold text-navy-900">STIE STEMBI BANDUNG</h4>
+                <span class="text-xs font-mono font-semibold text-accent-blue bg-blue-50 px-2 py-0.5 rounded">Jul 2018 - Agu 2022</span>
+              </div>
+              <p class="text-xs font-semibold text-slate-700 mb-2">S1 Ekonomi Syariah (Sarjana Ekonomi)</p>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Fokus kurikulum inti: Manajemen Bisnis, Ekonomi Makro & Mikro, Manajemen Strategis, Akuntansi Keuangan, Etika Bisnis, dan Analisis Pasar yang aplikatif bagi peran Sales Manager.
+              </p>
+              
+              <!-- Key Academic & Org Achievements -->
+              <div class="bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-2 text-xs">
+                <div class="font-bold text-slate-800 flex items-center gap-1.5">
+                  <i class="fa-solid fa-star text-amber-500 text-xs"></i> Rekam Jejak Kepemimpinan Kampus:
+                </div>
+                <ul class="space-y-1 text-slate-600 pl-4 list-disc">
+                  <li><strong>Ketua Mahasiswa Ekonomi Syariah (2018-2022):</strong> Memimpin koordinasi tim organisasi tingkat tinggi selama 4 tahun.</li>
+                  <li><strong>Ketua Event Seminar Nasional Ekonomi Syariah (2020):</strong> Mengelola perizinan, negosiasi pembicara nasional, sponsorship, dan tata kelola anggaran.</li>
+                  <li><strong>Ketua Divisi Publikasi Forum Mahasiswa Islam (2020):</strong> Mengarahkan perancangan konten promosi dan strategi komunikasi media.</li>
+                  <li><strong>PKL (2021) & Riset Ilmiah Kolaboratif (2022):</strong> Menyelesaikan studi empiris data pasar bersama dosen pembina.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- GONTOR -->
+            <div class="relative pl-6 border-l-2 border-slate-300">
+              <span class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-navy-900 border-4 border-white shadow-sm"></span>
+              <div class="flex flex-wrap items-baseline justify-between gap-1 mb-1">
+                <h4 class="text-base font-bold text-navy-900">Pondok Modern Darussalam Gontor</h4>
+                <span class="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">Mei 2011 - Des 2014</span>
+              </div>
+              <p class="text-xs font-semibold text-slate-700 mb-2">SMA / MA - Agama Islam & Bahasa</p>
+              <div class="bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-1.5 text-xs text-slate-600">
+                <p>• <strong>Bendahara Kantin Pelajar OPPM (2013-2014):</strong> Mengelola arus kas transaksi harian skala ribuan santri.</p>
+                <p>• <strong>Sekretaris Konsulat Kediri & Pengurus Asrama (2013):</strong> Mengkoordinasikan administrasi konsulat kedaerahan.</p>
+                <p>• <strong>Pengurus Harian Perkumpulan Qari' Pondok (2013).</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= VIEW 4: SKILLS & TOOLS ================= -->
+      <section id="view-skills" class="view-content space-y-6">
+        
+        <!-- Skill Matrix Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Category 1: Sales Mastery -->
+          <div class="glass-panel rounded-2xl p-5 shadow-card-glass border border-slate-200">
+            <div class="flex items-center gap-2.5 mb-4 text-navy-900 font-bold text-sm border-b border-slate-100 pb-2">
+              <div class="w-7 h-7 rounded-lg bg-blue-100 text-accent-blue flex items-center justify-center">
+                <i class="fa-solid fa-chart-pie text-xs"></i>
+              </div>
+              <span>Sales & Business Domain</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Sales Management</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Corporate B2B Sales</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Account Management</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Strategi Penjualan Area</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Analisis Pasar & Kompetitor</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Negosiasi Kontrak</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Pengembangan Bisnis</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Credit Control (AR)</span>
+            </div>
+          </div>
+
+          <!-- Category 2: Leadership -->
+          <div class="glass-panel rounded-2xl p-5 shadow-card-glass border border-slate-200">
+            <div class="flex items-center gap-2.5 mb-4 text-navy-900 font-bold text-sm border-b border-slate-100 pb-2">
+              <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                <i class="fa-solid fa-users-gear text-xs"></i>
+              </div>
+              <span>Interpersonal & Leadership</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Supervisi Tim Lapangan</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Sales Coaching & Joint Visit</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Komunikasi Persuasif</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Adaptasi & Problem Solving</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Manajemen Konflik</span>
+            </div>
+          </div>
+
+          <!-- Category 3: Technical & Creative -->
+          <div class="glass-panel rounded-2xl p-5 shadow-card-glass border border-slate-200">
+            <div class="flex items-center gap-2.5 mb-4 text-navy-900 font-bold text-sm border-b border-slate-100 pb-2">
+              <div class="w-7 h-7 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+                <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+              </div>
+              <span>Technical & Creative Media</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Internet & Network Services</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Bandwidth Allocation Planning</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Desain Grafis Komersial</span>
+              <span class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-navy-900 hover:text-white transition cursor-default">Fotografi & Konten Edukasi</span>
+            </div>
+          </div>
+
+          <!-- Category 4: Media & Channel -->
+          <div class="glass-panel rounded-2xl p-5 shadow-card-glass border border-slate-200">
+            <div class="flex items-center gap-2.5 mb-4 text-navy-900 font-bold text-sm border-b border-slate-100 pb-2">
+              <div class="w-7 h-7 rounded-lg bg-red-100 text-red-600 flex items-center justify-center">
+                <i class="fa-brands fa-youtube text-xs"></i>
+              </div>
+              <span>Media Portofolio</span>
+            </div>
+            <p class="text-xs text-slate-600 mb-3">
+              Kanal resmi yang memuat portofolio konten kreatif, presentasi produk, dan edukasi publik.
+            </p>
+            <a href="https://youtube.com/@jihandikahakam9049" target="_blank" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold text-xs transition shadow-sm">
+              <i class="fa-brands fa-youtube"></i> Buka Channel @jihandikahakam9049
+            </a>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Futuristic Footer Status Bar -->
+  <footer class="mt-auto border-t border-slate-200 bg-white/90 backdrop-blur-md py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2 font-mono">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>DEPLOYED CANDIDATE: JIHANDIKA HAKAM • GARUT</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span>STIE STEMBI (SE)</span>
+        <span>OPPM GONTOR ALUMNI</span>
+        <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="text-accent-blue hover:underline">
+          <i class="fa-solid fa-arrow-up"></i> Top
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= INTERACTIVE MODAL / DRAWER ================= -->
+  <div id="role-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-navy-950/70 backdrop-blur-sm transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="glass-panel w-full max-w-xl rounded-3xl p-6 sm:p-7 shadow-2xl border border-cyan-400/30 transform scale-95 transition-all duration-300 relative bg-white" id="modal-box">
+      
+      <!-- Close Button -->
+      <button onclick="closeModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div id="modal-content">
+        <!-- Injected via JavaScript -->
+      </div>
+      
+      <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end gap-2">
+        <button onclick="closeModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl">
+          Tutup
+        </button>
+        <button onclick="copyRoleDetails()" class="px-4 py-2 text-xs font-semibold text-white bg-navy-900 hover:bg-navy-800 rounded-xl shadow-sm flex items-center gap-1.5">
+          <i class="fa-regular fa-copy"></i> Copy Role Info
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-navy-900 text-white border border-cyan-400/40 rounded-2xl shadow-glow-sm text-xs font-mono pointer-events-none">
+    <i class="fa-solid fa-circle-check text-cyan-400 text-sm"></i>
+    <span id="toast-text">Message successfully copied</span>
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    /* ====================================================
+       1. INTERACTIVE GLOWING CURSOR TRAIL (HTML5 Canvas)
+       ==================================================== */
+    const canvas = document.getElementById('cursor-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const particles = [];
+    const mouse = { x: width / 2, y: height / 2, moved: false };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.moved = true;
+      // Spawn particles on cursor move
+      for (let i = 0; i < 2; i++) {
+        particles.push(new Particle(mouse.x, mouse.y));
+      }
+    });
+
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 4.5 + 1.5;
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+        this.color = Math.random() > 0.4 ? '#38bdf8' : '#2563eb';
+        this.alpha = 1;
+        this.decay = Math.random() * 0.025 + 0.015;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha -= this.decay;
+        if (this.size > 0.4) this.size -= 0.05;
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function renderCursor() {
+      ctx.clearRect(0, 0, width, height);
+      
+      // Draw smooth trailing particles
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].alpha <= 0 || particles[i].size <= 0.4) {
+          particles.splice(i, 1);
+          i--;
+        }
+      }
+
+      // Draw primary pointer glow
+      if (mouse.moved) {
+        ctx.save();
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.4)';
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      requestAnimationFrame(renderCursor);
+    }
+    renderCursor();
+
+
+    /* ====================================================
+       2. TAB SWITCHING SYSTEM
+       ==================================================== */
+    const tabButtons = document.querySelectorAll('#nav-tabs .nav-btn');
+    const views = document.querySelectorAll('.view-content');
+
+    function switchTab(targetId) {
+      // Update buttons
+      tabButtons.forEach(btn => {
+        const isTarget = btn.getAttribute('data-target') === targetId;
+        if (isTarget) {
+          btn.className = 'nav-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-navy-900 text-white shadow-md';
+        } else {
+          btn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-600 hover:bg-slate-100 hover:text-navy-900';
+        }
+      });
+
+      // Update views
+      views.forEach(view => {
+        if (view.id === `view-${targetId}`) {
+          view.classList.add('active');
+        } else {
+          view.classList.remove('active');
+        }
+      });
+      
+      // Scroll to top of dashboard content on mobile
+      if (window.innerWidth < 1024) {
+        window.scrollTo({ top: 380, behavior: 'smooth' });
+      }
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        switchTab(target);
+      });
+    });
+
+
+    /* ====================================================
+       3. EXPERIENCE FILTERING
+       ==================================================== */
+    function filterExperience(category, btnElement) {
+      const cards = document.querySelectorAll('#experience-list .exp-card');
+      const filterChips = document.querySelectorAll('#exp-filters .filter-chip');
+
+      // Update active chip style
+      filterChips.forEach(chip => {
+        chip.className = 'filter-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700';
+      });
+      btnElement.className = 'filter-chip px-3 py-1 rounded-lg text-xs font-semibold bg-navy-900 text-white';
+
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        if (category === 'all' || cardCategory === category) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('exp-count-label').textContent = `Showing ${visibleCount} Experiences`;
+    }
+
+
+    /* ====================================================
+       4. GLOBAL SEARCH FILTER
+       ==================================================== */
+    const searchInput = document.getElementById('global-search');
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase().trim();
+      if (!term) return;
+
+      // Auto switch to experience if typing job role
+      const expCards = document.querySelectorAll('#experience-list .exp-card');
+      let foundInExp = false;
+      expCards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if (text.includes(term)) {
+          card.style.display = 'block';
+          foundInExp = true;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (foundInExp) {
+        switchTab('experience');
+      }
+    });
+
+
+    /* ====================================================
+       5. DETAILED ROLE MODAL / DRAWER
+       ==================================================== */
+    const roleData = {
+      'ekamas-asm': {
+        title: 'Area Sales Manager (Kontrak)',
+        company: 'PT Ekamas Mora Republik Tbk.',
+        period: 'Sep 2025 - Sekarang',
+        location: 'Kabupaten Garut & Sekitarnya',
+        badge: 'Top Operational Leader',
+        overview: 'Bertanggung jawab penuh atas performa penjualan teritorial, sinkronisasi jalur distribusi, kestabilan persediaan di gudang distributor, serta memastikan kelancaran kolektibilitas piutang.',
+        duties: [
+          'Memecah target korporat menjadi target operasional per wilayah/tim secara presisi.',
+          'Supervisi lapangan: Morning briefing harian, coaching teknik closing, dan joint visit mitra prioritas.',
+          'Kendali penagihan (Account Receivable) guna melindungi kesehatan arus kas (cash flow) area.',
+          'Menjaga tingkat penetrasi pasar dan menekan insiden ketiadaan produk (out of stock).',
+          'Analisis taktis pergerakan kompetitor dan eksekusi program promosi terpusat.'
+        ],
+        kpis: [
+          { label: 'Revenue Growth', val: '+10%' },
+          { label: 'Stockout Incidence', val: 'Minimal' },
+          { label: 'AR Realization', val: 'Tepat Waktu' }
+        ]
+      },
+      'ekamas-ae': {
+        title: 'Account Executive (Freelance)',
+        company: 'PT Eka Mas Republik',
+        period: 'Jul 2025 - Sekarang',
+        location: 'Jawa Barat Area',
+        badge: 'Enterprise Sales',
+        overview: 'Mengakselerasi penetrasi internet korporasi dan residensial melalui canvassing terstruktur, konsultasi teknis kebutuhan bandwidth, serta administrasi kontrak penawaran.',
+        duties: [
+          'Melakukan canvassing dan presentasi produk rutin setiap bulan bagi calon pelanggan baru.',
+          'Menganalisis kapasitas bandwidth dan geolokasi pelanggan dengan akurasi 100%.',
+          'Mengoordinasikan instalasi teknisi dan meminimalisir kendala komplain pelanggan.',
+          'Meningkatkan rasio retensi pelanggan sebesar 10% melalui support proaktif.'
+        ],
+        kpis: [
+          { label: 'Bandwidth Match', val: '100%' },
+          { label: 'Retention Gain', val: '+10%' },
+          { label: 'Contract Adherence', val: '100%' }
+        ]
+      },
+      'misykah': {
+        title: 'Guru Pesantren (Full-Time)',
+        company: 'Pesantren Al-misykah Islamic Boarding School',
+        period: 'Jan 2025 - Jul 2025',
+        location: 'Jawa Barat',
+        badge: 'Educational Leadership',
+        overview: 'Merancang dan mengeksekusi kurikulum seni kaligrafi dan tajwid untuk penguatan kapasitas akademik dan etika santri.',
+        duties: [
+          'Menyusun rencana pembelajaran kaligrafi mingguan sesuai target kurikulum.',
+          'Melakukan mentoring tilawah dan evaluasi rutin perkembangan santri.',
+          'Menerapkan pendekatan persuasif dalam pembentukan karakter dan disiplin santri.'
+        ],
+        kpis: [
+          { label: 'Target Kurikulum', val: '100% Tercapai' },
+          { label: 'Metode Bimbingan', val: 'Persuasif' }
+        ]
+      },
+      'arrisalah': {
+        title: 'Daily Manager (Full-Time)',
+        company: 'Yayasan Ar-Risalah Hidayatullah',
+        period: 'Des 2023 - Jan 2024',
+        location: 'Jawa Barat',
+        badge: 'Operations Management',
+        overview: 'Memimpin koordinasi operasional harian antar divisi guna menjaga standar keteraturan dan efektivitas program yayasan.',
+        duties: [
+          'Mengatur alur jadwal kegiatan yayasan dan komunikasi guru/staf.',
+          'Menyampaikan kurikulum etika spiritual dan monitoring performa santri.',
+          'Menegakkan SOP disiplin lingkungan asrama.'
+        ],
+        kpis: [
+          { label: 'Kepatuhan SOP', val: 'Tinggi' },
+          { label: 'Laporan Performa', val: 'Akurat' }
+        ]
+      },
+      'properti': {
+        title: 'Property Consultant (Full-Time)',
+        company: 'Pesantren Properti Indonesia',
+        period: 'Okt 2021 - Des 2023',
+        location: 'Jawa Barat',
+        badge: 'High-Ticket Investment',
+        overview: 'Konsultasi investasi aset properti bernilai tinggi, negosiasi harga penutupan, serta produksi kampanye digital edukatif.',
+        duties: [
+          'Membimbing investor dalam analisis ROI properti dan prospek nilai aset.',
+          'Menegosiasikan harga terbaik konsumen dengan tetap melindungi margin perusahaan.',
+          'Membuat konten edukasi digital untuk percepatan konversi penjualan unit.'
+        ],
+        kpis: [
+          { label: 'Kepuasan Investor', val: 'Tinggi' },
+          { label: 'Margin Protection', val: 'Optimal' }
+        ]
+      },
+      'madani': {
+        title: 'Manajer Asrama (Full-Time)',
+        company: 'Rumah Qur\'an Madani',
+        period: 'Jan 2021 - Sep 2022',
+        location: 'Jawa Barat',
+        badge: 'Facility & Team Ops',
+        overview: 'Menyelenggarakan tata kelola logistik, ketertiban santri, dan pelaporan operasional berkala ke manajemen pusat.',
+        duties: [
+          'Memastikan seluruh jadwal kegiatan harian berjalan tertib dan tepat waktu.',
+          'Menyusun evaluasi bulanan performa santri bagi manajemen pusat.'
+        ],
+        kpis: [
+          { label: 'Ketepatan Jadwal', val: '100%' },
+          { label: 'Laporan Berkala', val: 'Rutin' }
+        ]
+      }
+    };
+
+    let currentModalKey = '';
+
+    function openDetailModal(key) {
+      const data = roleData[key];
+      if (!data) return;
+      currentModalKey = key;
+
+      const modal = document.getElementById('role-modal');
+      const box = document.getElementById('modal-box');
+      const content = document.getElementById('modal-content');
+
+      content.innerHTML = `
+        <div class="flex items-center gap-2 mb-2 font-mono">
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-50 text-accent-blue border border-blue-200">
+            ${data.badge}
+          </span>
+          <span class="text-xs text-slate-400">• ${data.period}</span>
+        </div>
+        
+        <h3 class="text-xl font-extrabold text-navy-900 leading-snug">${data.title}</h3>
+        <p class="text-xs font-semibold text-accent-blue mb-4">${data.company} • ${data.location}</p>
+
+        <p class="text-xs text-slate-600 leading-relaxed mb-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
+          ${data.overview}
+        </p>
+
+        <h4 class="text-xs font-bold text-navy-900 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <i class="fa-solid fa-list-check text-cyan-600"></i> Tanggung Jawab & Eksekusi:
+        </h4>
+        <ul class="space-y-1.5 text-xs text-slate-600 list-disc list-inside mb-5">
+          ${data.duties.map(d => `<li>${d}</li>`).join('')}
+        </ul>
+
+        <h4 class="text-xs font-bold text-navy-900 uppercase tracking-wider mb-2">Key Operational Metrics:</h4>
+        <div class="grid grid-cols-3 gap-2">
+          ${data.kpis.map(k => `
+            <div class="p-2.5 rounded-xl bg-slate-100 text-center">
+              <span class="text-[10px] text-slate-400 block">${k.label}</span>
+              <span class="text-xs font-bold text-navy-900 font-mono">${k.val}</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        box.classList.remove('scale-95');
+        box.classList.add('scale-100');
+      }, 10);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('role-modal');
+      const box = document.getElementById('modal-box');
+      box.classList.remove('scale-100');
+      box.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden', 'opacity-0', 'pointer-events-none');
+      }, 150);
+    }
+
+    // Close on backdrop click
+    document.getElementById('role-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'role-modal') closeModal();
+    });
+
+    function copyRoleDetails() {
+      if (!currentModalKey || !roleData[currentModalKey]) return;
+      const r = roleData[currentModalKey];
+      const text = `${r.title} - ${r.company} (${r.period})\n${r.overview}`;
+      copyToClipboard(text, 'Informasi posisi berhasil disalin!');
+    }
+
+
+    /* ====================================================
+       6. CLIPBOARD & TOAST SYSTEM
+       ==================================================== */
+    function copyToClipboard(text, successMsg) {
+      const tempInput = document.createElement('textarea');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg || 'Berhasil disalin ke clipboard!');
+      } catch (err) {
+        showToast('Gagal menyalin text.');
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      toastText.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2800);
+    }
+  </script>
+</body>
+</html>
