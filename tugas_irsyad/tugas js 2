@@ -1,9 +1,0 @@
-// Deklarasi variabel
-let nama = "Budi";       
-let umur = 17;           
-let siswa = true;        
-
-// Menampilkan ke layar
-console.log(nama);
-console.log(umur);
-console.log(siswa);
